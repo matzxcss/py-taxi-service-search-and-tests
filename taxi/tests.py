@@ -40,12 +40,14 @@ class ManufacturerModelTest(TestCase):
         self.client.force_login(self.driver)
 
     def test_string_representation(self):
-        manufacturer = Manufacturer.objects.create(name="Toyota")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
         self.assertEqual(str(manufacturer), "Toyota")
 
     def test_search_by_name(self):
-        Manufacturer.objects.create(name="Toyota")
-        Manufacturer.objects.create(name="Honda")
+        Manufacturer.objects.create(name="Toyota", country="Japan")
+        Manufacturer.objects.create(name="Honda", country="Japan")
         url = reverse("taxi:manufacturer-list")
         response = self.client.get(url, data={"name": "toy"})
         self.assertContains(response, "Toyota")
@@ -61,7 +63,9 @@ class CarViewTest(TestCase):
             license_number="ABC12345",
         )
         self.client.force_login(self.driver)
-        self.manufacturer = Manufacturer.objects.create(name="Ferrari")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Ferrari", country="Italy"
+        )
 
     def test_search_by_model(self):
         Car.objects.create(
